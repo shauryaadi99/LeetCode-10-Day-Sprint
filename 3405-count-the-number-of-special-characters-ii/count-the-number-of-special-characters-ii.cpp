@@ -5,10 +5,10 @@ public:
         unordered_map<char, pair<int, int>> lower_upper;
         for (int i = 0; i < word.size(); i++) {
             char ch = word[i];
+            char lower = tolower(ch);
             if (!lower_upper.count(ch))
                 lower_upper[ch] = {-1, -1};
             if (isupper(ch)) {
-                char lower = tolower(ch);
                 if (lower_upper[lower].second == -1) {
                     lower_upper[lower].second = i;
                 }
