@@ -1,14 +1,17 @@
 class Solution {
 public:
     bool asteroidsDestroyed(int mass, vector<int>& asteroids) {
-        sort(asteroids.begin(), asteroids.end());
+        map<int, int> freq;
         long long masss = mass;
-        int n = asteroids.size();
-        for (int i = 0; i < n; i++) {
-            if (masss < asteroids[i]) {
+        for (int i = 0; i < asteroids.size(); i++) {
+            freq[asteroids[i]]++;
+        }
+        for (auto x : freq) {
+            if (masss < x.first)
                 return false;
-            }
-            masss += asteroids[i];
+            // if (x.first < masss) {
+                masss += 1LL * x.second * x.first;
+            // }
         }
         return true;
     }
