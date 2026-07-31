@@ -22,20 +22,15 @@ public: // in a bst inorder taversal of a binaray seach tree is always sorted
     }
     int rangeSumBST(TreeNode* root, int low, int high) {
         inorder(root);
-        vector<int> prefix(arr.size(), 0);
 
-        prefix[0] = arr[0];
-        for (int i = 1; i < prefix.size(); i++) {
-            prefix[i] = arr[i] + prefix[i - 1];
-        }
         int x = -1, y = -1;
-        for (int i = 0; i < prefix.size(); i++) {
+        for (int i = 0; i < arr.size(); i++) {
             if (arr[i] >= low) {
                 x = i;
                 break;
             }
         }
-        for (int i = prefix.size()-1; i >= 0; i--) {
+        for (int i = arr.size() - 1; i >= 0; i--) {
             if (arr[i] <= high) {
                 y = i;
                 break;
@@ -43,6 +38,6 @@ public: // in a bst inorder taversal of a binaray seach tree is always sorted
         }
         if (x == -1 || y == -1)
             return -1;
-        return (prefix[y] - prefix[x-1]);
+        return accumulate(arr.begin() + x, arr.begin() + y + 1, 0);
     }
 };
