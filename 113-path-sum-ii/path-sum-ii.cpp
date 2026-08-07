@@ -12,24 +12,22 @@
  */
 class Solution {
 public:
-    vector<vector<int>> res;
+    vector<vector<int>> allSum;
     vector<int> path;
-    void explore_all_paths(TreeNode* root, int targetSum) {
+    void explore_all_pathsums(TreeNode* root, int target) {
         if (!root)
             return;
         path.push_back(root->val);
         if (!root->left && !root->right) {
-            if (root->val == targetSum)
-                res.push_back(path);
+            if (target == root->val)
+                allSum.push_back(path);
         }
-        explore_all_paths(root->left, targetSum - root->val);
-        explore_all_paths(root->right, targetSum - root->val);
+        explore_all_pathsums(root->left, target - root->val);
+        explore_all_pathsums(root->right, target - root->val);
         path.pop_back();
     }
     vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
-        if (!root)
-            return res;
-        explore_all_paths(root, targetSum);
-        return res;
+        explore_all_pathsums(root, targetSum);
+        return allSum;
     }
 };
