@@ -1,45 +1,42 @@
 class Solution {
 public:
-    vector<int> nums;
-    int n;
     int target;
-    int firstOccurances() {
-        int first = -1;
-        int l = 0, r = n - 1;
-        while (l <= r) {
-            int mid = l + (r - l) / 2;
-            if (nums[mid] == target) {
-                first = mid;
-                r = mid - 1;
-            } else if (nums[mid] < target) {
-                l = mid + 1;
-            } else
-                r = mid - 1;
+    int n;
+    int lower_bound(vector<int>& nums) {
+        int low = 0, high = n;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
         }
-        return first;
+        if (low == n || nums[low] != target)
+            return -1;
+        return low;
     }
-    int lastOccurances() {
-        int last = -1;
-        int l = 0, r = n - 1;
-        while (l <= r) {
-            int mid = l + (r - l) / 2;
-            if (nums[mid] == target) {
-                last = mid;
-                l = mid + 1;
-            } else if (nums[mid] < target) {
-                l = mid + 1;
-            } else
-                r = mid - 1;
+    int upper_bound(vector<int>& nums) {
+        int low = 0, high = n;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] <= target) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
         }
-        return last;
+        return low;
     }
     vector<int> searchRange(vector<int>& nums, int target) {
-        this->nums = nums;
         this->n = nums.size();
         this->target = target;
-        if (firstOccurances() == -1) {
+        // this->nums = nums;
+        int first_Occur = lower_bound(nums);
+        if (first_Occur == -1) {
             return {-1, -1};
         }
-        return {firstOccurances(), lastOccurances()};
+        int last_Occur = upper_bound(nums) - 1;
+        return {first_Occur, last_Occur};
     }
 };
