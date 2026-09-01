@@ -16,14 +16,11 @@ public:
 
         vector<vector<int>> dp(n, vector<int>(target + 1, 0));
 
-        // Base case
         dp[0][0] = (nums[0] == 0 ? 2 : 1);
 
-        // First element
         if (nums[0] != 0 && nums[0] <= target)
             dp[0][nums[0]] = 1;
 
-        // Notice t starts from 0
         for (int i = 1; i < n; i++) {
 
             for (int t = 0; t <= target; t++) {
