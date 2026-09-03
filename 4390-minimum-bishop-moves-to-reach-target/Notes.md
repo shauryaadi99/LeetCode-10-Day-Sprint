@@ -1,0 +1,1 @@
+<h2>minimum-bishop-moves-to-reach-target Notes</h2><hr>[ Time taken: 15m 30s ]
