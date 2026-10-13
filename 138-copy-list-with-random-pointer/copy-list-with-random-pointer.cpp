@@ -20,27 +20,29 @@ public:
         if (!head)
             return NULL;
         Node* temp = head;
+        // copying the node
         while (temp) {
-            Node* copynode = new Node(temp->val);
-            copynode->next = temp->next;
-            temp->next = copynode;
+            Node* copy = new Node(temp->val);
+            copy->next = temp->next;
+            temp->next = copy;
             temp = temp->next->next;
         }
+        // setting the random pointers
         temp = head;
-        Node* newHead = head->next;
         while (temp) {
             if (temp->random)
                 temp->next->random = temp->random->next;
             temp = temp->next->next;
         }
+        Node* copyHead = head->next;
         temp = head;
         while (temp) {
             Node* copy = temp->next;
             temp->next = copy->next;
             if (copy->next)
-                copy->next = copy->next->next;
-            temp = temp->next;
+            copy->next = copy->next->next;
+            temp= temp->next;
         }
-        return newHead;
+        return copyHead;
     }
 };
