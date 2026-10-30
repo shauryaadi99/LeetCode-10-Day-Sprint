@@ -1,43 +1,43 @@
-#define ll long long
-#define all(v) v.begin(), v.end()
-const ll inf = LLONG_MAX / 4;
 class Solution {
 public:
+    typedef tuple<int, int, int> T; //{dist,node,count}
     int shortestPath(int n, vector<vector<int>>& edges, string labels, int k) {
-        vector<vector<pair<int, int>>> adj(n);
-        for (auto& e : edges) {
-            adj[e[0]].push_back({e[1], e[2]});
+        unordered_map<int, vector<vector<int>>> adj;
+        for (auto& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            adj[u].push_back({v, wt});
         }
-
-        vector<vector<ll>> dist(n, vector<ll>(k + 1, inf));
-        priority_queue<vector<ll>, vector<vector<ll>>, greater<vector<ll>>> pq;
-
-        dist[0][1] = 0;
-        pq.push({0, 0, 1}); // edge,dist,cntOfConsequtive
+        // result[node][count] = min cost to reach node with 'count' consequtive
+        // identical characters.
+        vector<vector<int>> result(n, vector<int>(k + 1, INT_MAX));
+        priority_queue<T, vector<T>, greater<T>> pq;
+        result[0][1] = 0;
+        pq.push({0, 0, 1});
         while (!pq.empty()) {
-            auto e = pq.top();
+            auto [d, node, count] = pq.top();
             pq.pop();
-            ll d = e[0];
-            int u = e[1];
-            int cur = e[2];
-
-            if (d != dist[u][cur])
+            if (d > result[node][count])
                 continue;
-            for (auto& vec : adj[u]) {
-                int v = vec.first, w = vec.second;
-                int newcur = (labels[v] == labels[u]) ? cur + 1 : 1;
-                if (newcur > k)
+            if (node == n - 1)
+                return d;
+            for (auto& vec : adj[node]) {
+                int adjnode = vec[0];
+                int wt = vec[1];
+
+                int newcount =
+                    (labels[adjnode] == labels[node] ? count + 1 : 1);
+                if (newcount > k)
                     continue;
 
-                if (dist[v][newcur] > d + w) {
-                    dist[v][newcur] = d + w;
-                    pq.push({dist[v][newcur], v, newcur});
+                int newDist = d + wt;
+                if (newDist < result[adjnode][newcount]) {
+                    result[adjnode][newcount] = newDist;
+                    pq.push({newDist, adjnode, newcount});
                 }
             }
         }
-        ll ans = inf;
-        for (int i = 1; i <= k; i++)
-            ans = min(ans, dist[n - 1][i]);
-        return ans == inf ? -1 : ans;
+        return -1;
     }
 };
